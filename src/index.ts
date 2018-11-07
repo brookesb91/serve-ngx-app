@@ -1,6 +1,9 @@
+import { Request, Response } from 'express';
+
 const express = require('express');
 const http = require('http');
 const path = require('path');
+
 const app = express();
 const server = http.Server(app);
 
@@ -31,7 +34,7 @@ export class Server {
   start(): void {
     this.ngxApps.forEach(ngxApp => {
       app.use(`${ngxApp.route}/`, express.static(path.join(__dirname, ngxApp.path)));
-      app.get(`${ngxApp.route}/*`, function (req: Express.Request, res: Express.Response) {
+      app.get(`${ngxApp.route}/*`, function (req: Request, res: Response) {
         res.sendFile(path.join(__dirname, `${ngxApp.path}/index.html`));
       });
       server.listen(this.port, () => console.log(`Serving ${this.ngxApps.length} apps on port ${this.port}`));
